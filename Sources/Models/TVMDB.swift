@@ -9,6 +9,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 public enum TVQueryType: String{
   case latest, popular
@@ -30,6 +31,24 @@ extension TVMDB{
         data = TVDetailedMDB.init(results: json)
       }
       completion(apiReturn, data)
+    }
+  }
+  
+  ///Get the primary information about a TV series by id.
+  public class func PKtv(tvShowID: Int!, language: String?) -> Promise<TVDetailedMDB>{
+    return Promise { seal in
+      Client.TV(String(tvShowID),  page: nil, language: language, timezone: nil){
+        apiReturn in
+        var data: TVDetailedMDB?
+        if let json = apiReturn.json {
+          data = TVDetailedMDB.init(results: json)
+        }
+        if data == nil {
+          seal.reject(apiReturn.error!)
+        } else {
+          seal.fulfill(data!)
+        }
+      }
     }
   }
   
@@ -211,7 +230,7 @@ extension TVMDB{
   }
   
   
-   /// Retrive data by append multiple tv methods. Initlization of object have to be done manually. Exepect TVMDB
+  /// Retrive data by append multiple tv methods. Initlization of object have to be done manually. Exepect TVMDB
   public class func tvAppendTo(tvShowID: Int!, language: String? = nil, append_to: [String], completion: @escaping (_ clientReturn: ClientReturn, _ data: TVDetailedMDB?, _ json: JSON?) -> ()) -> (){
     Client.TV(String(tvShowID),  page: nil, language: language, timezone: nil, append_to: append_to){
       apiReturn in

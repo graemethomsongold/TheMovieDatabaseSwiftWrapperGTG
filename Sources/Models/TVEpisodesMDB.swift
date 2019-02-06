@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 public struct TVEpisodesMDB: ArrayObject {
   
@@ -62,6 +63,26 @@ public struct TVEpisodesMDB: ArrayObject {
     }
   }
   
+  ///Get the primary information about a TV episode by combination of a season and episode number.
+  public static func episode_number(tvShowId: Int!, seasonNumber: Int!, episodeNumber: Int!, language: String?) -> Promise<TVEpisodesMDB>{
+    return Promise { seal in
+      let urltype = String(tvShowId) + "/season/" + String(seasonNumber) + "/episode/" + String(episodeNumber)
+      Client.Seasons(urltype,  language: language){
+        apiReturn in
+        var episodes: TVEpisodesMDB?
+        if let json = apiReturn.json {
+          episodes = TVEpisodesMDB(results: json)
+        }
+        if episodes == nil {
+          seal.reject(apiReturn.error!)
+        } else {
+          seal.fulfill(episodes!)
+        }
+      }
+    }
+    
+  }
+  
   ///Get the TV episode credits by combination of season and episode number.
   public static func credits(tvShowId: Int!, seasonNumber: Int!, episodeNumber: Int!, completion: @escaping (_ clientReturn: ClientReturn, _ data: TVCreditsMDB?) -> ()) -> (){
     let urltype = String(tvShowId) + "/season/" + String(seasonNumber) + "/episode/" + String(episodeNumber) + "/credits"
@@ -107,7 +128,7 @@ public struct TVEpisodesMDB: ArrayObject {
     Client.Seasons(urltype,  language: language){
       apiReturn in
       let videos: [VideosMDB]? = apiReturn.decodeResults()
-
+      
       completion(apiReturn, videos)
     }
   }

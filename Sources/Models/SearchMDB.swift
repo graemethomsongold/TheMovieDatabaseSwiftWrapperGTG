@@ -80,7 +80,7 @@ public struct SearchMDB{
         if movie?.count==0 {
           seal.reject(apiReturn.error!)
         } else {
-          seal.resolve(movie, apiReturn.error)
+          seal.fulfill(movie!)
         }
       }
     }
@@ -107,6 +107,23 @@ public struct SearchMDB{
         person = TVMDB.initialize(json: json)
       }
       completion(apiReturn, person)
+    }
+  }
+  
+  ///Search for TV shows by title.
+  public static func PKtv(query: String, page: Int?, language: String?, first_air_date_year: String?) -> Promise<[TVMDB]>{
+    return Promise { seal in
+      Client.Search("tv",  query: query, page: page, language: language, include_adult: nil, year: nil, primary_release_year: nil, search_type: nil, first_air_date_year: first_air_date_year) { apiReturn in
+        var tv: [TVMDB]?
+        if let json = apiReturn.json?["results"] {
+          tv = TVMDB.initialize(json: json)
+        }
+        if tv?.count==0 {
+          seal.reject(apiReturn.error!)
+        } else {
+          seal.fulfill(tv!)
+        }
+      }
     }
   }
   
