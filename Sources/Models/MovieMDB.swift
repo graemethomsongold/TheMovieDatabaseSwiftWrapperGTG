@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 public enum MovieQueryType: String{
 	
@@ -27,6 +28,20 @@ extension MovieMDB{
         detailed = MovieDetailedMDB.init(results: json)
       }
       completion(apiReturn, detailed)
+    }
+  }
+  
+  ///Get the basic movie information for a specific movie id.
+  public class func PKmovie(movieID: Int!, language: String? = nil) -> Promise<MovieDetailedMDB> {
+    return Promise { seal in
+      Client.Movies(String(movieID),  page: nil, language: language){
+        apiReturn in
+        var detailed: MovieDetailedMDB?
+        if let json = apiReturn.json {
+          detailed = MovieDetailedMDB.init(results: json)
+        }
+        seal.resolve(detailed, apiReturn.error)
+      }
     }
   }
   
