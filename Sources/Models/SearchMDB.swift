@@ -1,3 +1,5 @@
+import PromiseKit
+
 public struct SearchMDB{
   
   ///Search for companies by name.
@@ -63,6 +65,20 @@ public struct SearchMDB{
         movie = MovieMDB.initialize(json: json)
       }
       completion(apiReturn, movie)
+    }
+  }
+  
+  ///Search for movies by title.
+  public static func PKmovie(query: String, language: String?, page: Int?, includeAdult: Bool?, year: Int?, primaryReleaseYear: Int?)  -> Promise<[MovieMDB]> {
+    return Promise { seal in
+      Client.Search("movie",  query: query, page: page, language: language, include_adult: includeAdult, year: year, primary_release_year: primaryReleaseYear, search_type: nil, first_air_date_year: nil) {
+        apiReturn in
+        var movie: [MovieMDB]?=nil
+        if let json = apiReturn.json?["results"] {
+          movie = MovieMDB.initialize(json: json)
+        }
+        seal.resolve(movie, apiReturn.error)
+      }
     }
   }
   
