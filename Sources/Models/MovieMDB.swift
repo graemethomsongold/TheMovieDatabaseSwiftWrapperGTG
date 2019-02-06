@@ -40,7 +40,11 @@ extension MovieMDB{
         if let json = apiReturn.json {
           detailed = MovieDetailedMDB.init(results: json)
         }
-        seal.resolve(detailed, apiReturn.error)
+        if detailed == nil {
+          seal.reject(apiReturn.error!)
+        } else {
+          seal.fulfill(detailed!)
+        }
       }
     }
   }

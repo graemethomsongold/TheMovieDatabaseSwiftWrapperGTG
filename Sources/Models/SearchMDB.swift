@@ -77,7 +77,11 @@ public struct SearchMDB{
         if let json = apiReturn.json?["results"] {
           movie = MovieMDB.initialize(json: json)
         }
-        seal.resolve(movie, apiReturn.error)
+        if movie?.count==0 {
+          seal.reject(apiReturn.error!)
+        } else {
+          seal.resolve(movie, apiReturn.error)
+        }
       }
     }
   }
