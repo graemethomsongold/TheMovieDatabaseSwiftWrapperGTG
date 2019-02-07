@@ -83,7 +83,7 @@ public struct SearchMDB{
         if let json = apiReturn.json?["results"] {
           movie = MovieMDB.initialize(json: json)
         }
-        if movie?.count==0 {
+        if apiReturn.pageResults?.total_results == 0 {
           seal.reject(TMDBSearchError.MovieNotFound)
         } else {
           seal.fulfill(movie!)
@@ -124,7 +124,7 @@ public struct SearchMDB{
         if let json = apiReturn.json?["results"] {
           tv = TVMDB.initialize(json: json)
         }
-        if tv?.count==0 {
+        if apiReturn.pageResults?.total_results == 0 {
           seal.reject(TMDBSearchError.TVShowNotFound)
         } else {
           seal.fulfill(tv!)

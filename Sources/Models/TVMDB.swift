@@ -43,7 +43,7 @@ extension TVMDB{
         if let json = apiReturn.json {
           data = TVDetailedMDB.init(results: json)
         }
-        if data == nil {
+        if apiReturn.pageResults?.total_results == 0 {
           seal.reject(TMDBSearchError.TVShowNotFound)
         } else {
           seal.fulfill(data!)
