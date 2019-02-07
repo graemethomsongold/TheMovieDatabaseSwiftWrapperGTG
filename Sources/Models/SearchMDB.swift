@@ -82,11 +82,13 @@ public struct SearchMDB{
         var movie: [MovieMDB]?=nil
         if let json = apiReturn.json?["results"] {
           movie = MovieMDB.initialize(json: json)
-        }
-        if apiReturn.pageResults?.total_results == 0 {
-          seal.reject(TMDBSearchError.MovieNotFound)
+          if apiReturn.pageResults?.total_results == 0 {
+            seal.reject(TMDBSearchError.MovieNotFound)
+          }else {
+            seal.fulfill(movie!)
+          }
         } else {
-          seal.fulfill(movie!)
+          seal.reject(TMDBSearchError.MovieNotFound)
         }
       }
     }
@@ -123,11 +125,13 @@ public struct SearchMDB{
         var tv: [TVMDB]?
         if let json = apiReturn.json?["results"] {
           tv = TVMDB.initialize(json: json)
-        }
-        if apiReturn.pageResults?.total_results == 0 {
-          seal.reject(TMDBSearchError.TVShowNotFound)
+          if apiReturn.pageResults?.total_results == 0 {
+            seal.reject(TMDBSearchError.TVShowNotFound)
+          }else {
+            seal.fulfill(tv!)
+          }
         } else {
-          seal.fulfill(tv!)
+          seal.reject(TMDBSearchError.TVShowNotFound)
         }
       }
     }

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "TMDBSwiftGTG"
-  s.version          = "0.0.9"
+  s.version          = "0.0.10"
   s.summary          = "Swift wrapper for themoviedb.org api v3"
   s.dependency 'PromiseKit', '~> 6.8'
 
