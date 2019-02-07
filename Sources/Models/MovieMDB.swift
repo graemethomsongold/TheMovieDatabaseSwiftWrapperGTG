@@ -32,7 +32,7 @@ extension MovieMDB{
   }
   
   ///Get the basic movie information for a specific movie id.
-  public class func PKmovie(movieID: Int!, language: String? = nil) -> Promise<MovieDetailedMDB> {
+  public class func movie(movieID: Int!, language: String? = nil) -> Promise<MovieDetailedMDB> {
     return Promise { seal in
       Client.Movies(String(movieID),  page: nil, language: language){
         apiReturn in

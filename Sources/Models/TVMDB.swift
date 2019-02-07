@@ -35,7 +35,7 @@ extension TVMDB{
   }
   
   ///Get the primary information about a TV series by id.
-  public class func PKtv(tvShowID: Int!, language: String?) -> Promise<TVDetailedMDB>{
+  public class func tv(tvShowID: Int!, language: String?) -> Promise<TVDetailedMDB>{
     return Promise { seal in
       Client.TV(String(tvShowID),  page: nil, language: language, timezone: nil){
         apiReturn in
