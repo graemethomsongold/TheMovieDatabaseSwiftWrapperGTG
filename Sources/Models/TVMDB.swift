@@ -44,7 +44,7 @@ extension TVMDB{
           data = TVDetailedMDB.init(results: json)
         }
         if data == nil {
-          seal.reject(apiReturn.error!)
+          seal.reject(TMDBSearchError.TVShowNotFound)
         } else {
           seal.fulfill(data!)
         }

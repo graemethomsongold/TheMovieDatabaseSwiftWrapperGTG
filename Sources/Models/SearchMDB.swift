@@ -1,5 +1,11 @@
 import PromiseKit
 
+enum TMDBSearchError: Error {
+  case TVShowNotFound
+  case MovieNotFound
+  case EpisodeNotFound
+}
+
 public struct SearchMDB{
   
   ///Search for companies by name.
@@ -78,7 +84,7 @@ public struct SearchMDB{
           movie = MovieMDB.initialize(json: json)
         }
         if movie?.count==0 {
-          seal.reject(apiReturn.error!)
+          seal.reject(TMDBSearchError.MovieNotFound)
         } else {
           seal.fulfill(movie!)
         }
@@ -119,7 +125,7 @@ public struct SearchMDB{
           tv = TVMDB.initialize(json: json)
         }
         if tv?.count==0 {
-          seal.reject(apiReturn.error!)
+          seal.reject(TMDBSearchError.TVShowNotFound)
         } else {
           seal.fulfill(tv!)
         }

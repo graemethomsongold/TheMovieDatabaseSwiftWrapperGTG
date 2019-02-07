@@ -74,7 +74,7 @@ public struct TVEpisodesMDB: ArrayObject {
           episodes = TVEpisodesMDB(results: json)
         }
         if episodes == nil {
-          seal.reject(apiReturn.error!)
+          seal.reject(TMDBSearchError.EpisodeNotFound)
         } else {
           seal.fulfill(episodes!)
         }

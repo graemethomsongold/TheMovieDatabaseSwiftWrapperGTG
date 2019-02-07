@@ -41,7 +41,7 @@ extension MovieMDB{
           detailed = MovieDetailedMDB.init(results: json)
         }
         if detailed == nil {
-          seal.reject(apiReturn.error!)
+          seal.reject(TMDBSearchError.MovieNotFound)
         } else {
           seal.fulfill(detailed!)
         }
